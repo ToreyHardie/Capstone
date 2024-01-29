@@ -34,9 +34,11 @@ export default function Login({ onLogin, onLogout }) {
       navigate('/login');
     };
   
+
     return (
-      <div>
-        <form onSubmit={handleLogin}>
+      <div className="login-container">
+        <div className="login-page"></div>
+        <form onSubmit={handleLogin} className="login-form">
           <input
             type="text"
             placeholder="Username"
@@ -49,11 +51,10 @@ export default function Login({ onLogin, onLogout }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Login</button>
+          <button className="login-button" type="submit">Login</button>
           <br />
         </form>
         {error && <p>{error}</p>}
       </div>
     );
-}
-
+  }

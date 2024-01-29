@@ -28,6 +28,7 @@ export default function SingleProduct({ isLoggedIn, addToCart }) {
             <h2>{product.title}</h2>
             <img src={product.image} alt={product.title} />
             <p>Category: {product.category}</p>
+            <p>Description: {product.description}</p>
             <p>Price: ${product.price}</p>
             {isLoggedIn && (
               <button className="button" onClick={() => addToCart(product)}>
@@ -39,10 +40,11 @@ export default function SingleProduct({ isLoggedIn, addToCart }) {
           <p>Loading...</p>
         )}
         <div>
-          <button onClick={() => navigate('/')}>&larr; Back to Home</button>
+        <button className="button" onClick={() => navigate('/')}>
+            &larr; Back to Home
+          </button>
         </div>
       </div>
     </>
   );
 }
-
