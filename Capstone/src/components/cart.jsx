@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 
 export default function Cart({ cart, removeFromCart, clearCart }) {
   const [cartItems, setCartItems] = useState(cart);
+  const [formData, setFormData] = useState({
+    address: '',
+    phoneNumber: '',
+    email: '',
+    zipCode: ''
+  });
 
   const handleQuantityChange = (index, newQuantity) => {
     if (!isNaN(newQuantity) && newQuantity >= 1) {
@@ -34,6 +40,23 @@ export default function Cart({ cart, removeFromCart, clearCart }) {
   const handleClearCart = () => {
     setCartItems([]);
     clearCart();
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    const isConfirmed = window.confirm('Thank you for your order!');
+    if (isConfirmed) {
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -73,10 +96,32 @@ export default function Cart({ cart, removeFromCart, clearCart }) {
               </td>
             </tr>
           ))}
+          <button onClick={handleClearCart}>Clear Cart</button>
         </tbody>
       </table>
       <p>Total: ${calculateTotal()}</p>
-      <button onClick={handleClearCart}>Clear Cart</button>
+
+
+      {/* Checkout Form */}
+      <form onSubmit={handleSubmit}>
+        <label>
+          Address:
+          <input type="text" name="address" value={formData.address} onChange={handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Phone Number:
+          <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Email Address:
+          <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
+        </label>
+        <br />
+        <br />
+        <button type="submit">Checkout</button>
+      </form>
     </div>
   );
 }

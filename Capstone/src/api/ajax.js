@@ -33,8 +33,23 @@ export const fetchsingleProduct = async (productId) => {
         },
         body: JSON.stringify({
           username: username,
-          password: password
+          password: password,
         }),
+      });
+      const json = await resp.json();
+      return json;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  export async function userInfo(id, email, address, phone) {
+    try {
+      const resp = await fetch(`${API_URL}/users/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
       });
       const json = await resp.json();
       return json;
