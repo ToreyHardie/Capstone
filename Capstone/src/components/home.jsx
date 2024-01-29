@@ -8,6 +8,7 @@ export default function Home({ isLoggedIn, addToCart }) {
   const [storedProducts, setStoredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [sortBy, setSortBy] = useState('price');
   const navigate = useNavigate();
 
   const filteredProducts = storedProducts.filter(product => {
@@ -17,9 +18,13 @@ export default function Home({ isLoggedIn, addToCart }) {
   });
 
   const sortedProducts = filteredProducts.sort((a, b) => {
-    const priceA = a.price;
-    const priceB = b.price;
-    return sortOrder === 'asc' ? priceA - priceB : priceB - priceA;
+    if (sortBy === 'price') {
+      const priceA = a.price;
+      const priceB = b.price;
+      return sortOrder === 'asc' ? priceA - priceB : priceB - priceA;
+    } else {
+      return 0;
+    }
   });
 
   async function getProducts() {
@@ -41,7 +46,51 @@ export default function Home({ isLoggedIn, addToCart }) {
   return (
     <>
       <div className="page-container">
-        {/* Other filtering and sorting UI */}
+        <div>
+          <label htmlFor="search">Search:</label>
+          <input
+            type="text"
+            id="search"
+            value={searchProducts}
+            onChange={(e) => setSearchProducts(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="category">Filter by Category:</label>
+          <select
+            id="category"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">All</option>
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <div>
+          <label htmlFor="sort">Sort by Price:</label>
+          <select
+            id="sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="price">Price</option>
+          </select>
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+        
         <div className="products-container">
           {sortedProducts.map(product => (
             <div className="product-card" key={product.id}>
@@ -52,7 +101,7 @@ export default function Home({ isLoggedIn, addToCart }) {
               {isLoggedIn && (
                 <button
                   className="button"
-                  onClick={() => addToCart(product)} // Ensure addToCart is called correctly
+                  onClick={() => addToCart(product)}
                 >
                   Add to Cart
                 </button>
@@ -68,11 +117,10 @@ export default function Home({ isLoggedIn, addToCart }) {
             </div>
           ))}
         </div>
-        {/* Link to Cart page */}
         <div>
-          <button onClick={() => navigate('/cart')}>Go to Cart</button>
         </div>
       </div>
     </>
   );
 }
+

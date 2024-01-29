@@ -10,18 +10,18 @@ import { Helmet } from 'react-helmet';
 function App() {
   document.title = 'Shop2Go';
   const [cart, setCart] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = (token) => {
-    setIsLoggedIn(true); // Set login status to true upon successful login
+    setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false); // Set login status to false upon logout
+    setIsLoggedIn(false);
   };
 
   const clearCart = () => {
-    setCart([]); // Clear the cart by setting it to an empty array
+    setCart([]);
   };
 
   const addToCart = (product) => {
@@ -60,4 +60,3 @@ function App() {
 }
 
 export default App;
-

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { userLogin } from '../api/ajax';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login({ onLogin }) {
+export default function Login({ onLogin, onLogout }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -14,20 +14,24 @@ export default function Login({ onLogin }) {
       try {
         const response = await userLogin(username, password);
   
-        // Check if response contains a token
         if (response && response.token) {
-          // Handle successful login
           console.log('Login successful!');
-          onLogin(response.token); // Update login status
-          navigate('/'); // Redirect to home page
+          onLogin(response.token);
+          localStorage.setItem('isLoggedIn', 'true');
+          navigate('/');
         } else {
-          // Handle login error
           setError('Invalid username or password');
         }
       } catch (err) {
         console.error('Login failed:', err);
         setError('An error occurred while logging in');
       }
+    };
+
+    const handleLogout = () => {
+      onLogout();
+      localStorage.removeItem('isLoggedIn');
+      navigate('/login');
     };
   
     return (
@@ -46,14 +50,10 @@ export default function Login({ onLogin }) {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit">Login</button>
-          <br></br>
-        "username": "johnd",
-        "password": "m38rmF$",
+          <br />
         </form>
         {error && <p>{error}</p>}
       </div>
     );
 }
-
-
 
