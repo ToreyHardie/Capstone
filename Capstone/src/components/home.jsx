@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchProducts } from '../api/ajax';
 import { useNavigate } from 'react-router-dom';
 
-export default function Home() {
+export default function Home({ isLoggedIn }) {
   const [products, setProducts] = useState([]);
   const [searchProducts, setSearchProducts] = useState('');
   const [storedProducts, setStoredProducts] = useState([]);
@@ -43,50 +43,10 @@ export default function Home() {
     setCart([...cart, product]);
   };
 
-  const removeFromCart = (index) => {
-    const newCart = [...cart];
-    newCart.splice(index, 1);
-    setCart(newCart);
-  };
-
   return (
     <>
       <div className="page-container">
-        <div className="search">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchProducts}
-            onChange={e => setSearchProducts(e.target.value)}
-          />
-        </div>
-
-        <div className="filter">
-          <select
-            value={selectedCategory}
-            onChange={e => setSelectedCategory(e.target.value)}
-          >
-            <option value="">All Categories</option>
-            {categories.map(category => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="sort">
-          <label>Sort by Price:</label>
-          <select
-            value={sortOrder}
-            onChange={e => setSortOrder(e.target.value)}
-          >
-            <option value="asc">Low to High</option>
-            <option value="desc">High to Low</option>
-          </select>
-        </div>
-
-        {/* Add to Cart button */}
+        {/* Other filtering and sorting UI */}
         <div className="products-container">
           {sortedProducts.map(product => (
             <div className="product-card" key={product.id}>
@@ -94,14 +54,16 @@ export default function Home() {
               <img src={product.image} alt={product.title} />
               <p>{product.category}</p>
               <p>Price: ${product.price}</p>
-              <button
-                className="button"
-                onClick={() => {
-                  addToCart(product);
-                }}
-              >
-                Add to Cart
-              </button>
+              {isLoggedIn && (
+                <button
+                  className="button"
+                  onClick={() => {
+                    addToCart(product);
+                  }}
+                >
+                  Add to Cart
+                </button>
+              )}
               <button
                 className="button"
                 onClick={() => {
@@ -113,7 +75,6 @@ export default function Home() {
             </div>
           ))}
         </div>
-
         {/* Link to Cart page */}
         <div>
           <button onClick={() => navigate('/cart')}>Go to Cart</button>
@@ -122,3 +83,4 @@ export default function Home() {
     </>
   );
 }
+

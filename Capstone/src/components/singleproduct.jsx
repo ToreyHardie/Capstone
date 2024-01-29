@@ -1,95 +1,52 @@
-/*
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { fetchsingleProduct, fetchProducts } from "../api/ajax";
-
-export default function SingleProduct({ token, userFetch }) {
-  const [product, setProduct] = useState([]);
-  const param = useParams();
-  const navigate = useNavigate();
-
-  async function fetchProduct() {
-    try {
-      const SingleProduct = await fetchsingleProduct(param.productId);
-      setProduct(SingleProduct);
-      console.log(SingleProduct);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  useEffect(() => {
-    fetchProduct();
-  }, []);
-
-  return (
-    <>
-      <div id="singleproduct">
-        <div className="cards">
-         
-        <h3>{product.title}</h3>
-              <img src={product.image} alt={product.title} />
-              <p>{product.category}</p>
-              <p>Price: ${product.price}</p>
-
-              <button
-                className="button"
-                onClick={() => {
-                  addToCart(product);
-                }}
-              >
-                Add to Cart
-              </button>
-
-          <button className="button" onClick={() => {navigate("/");}}>Go Back</button>
-        </div>
-      </div>
-    </>
-  );
-} */
-
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { fetchsingleProduct } from '../api/ajax';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function SingleProduct({ addToCart }) {
-  const [product, setProduct] = useState({});
+export default function SingleProduct({ isLoggedIn }) {
+  const [product, setProduct] = useState(null);
   const { productId } = useParams();
   const navigate = useNavigate();
 
-  async function fetchProduct() {
-    try {
-      const singleProduct = await fetchsingleProduct(productId);
-      setProduct(singleProduct);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   useEffect(() => {
-    fetchProduct();
+    async function getProduct() {
+      try {
+        const singleProduct = await fetchsingleProduct(productId);
+        setProduct(singleProduct);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getProduct();
   }, [productId]);
 
+  const addToCart = () => {
+    // Add to cart logic
+    console.log("Product added to cart:", product);
+  };
+
   return (
-    <div className="page-container">
-      <div id="singleproduct" className="product-card">
-        <h3>{product.title}</h3>
-        <img src={product.image} alt={product.title} />
-        <p>{product.category}</p>
-        <p>Price: ${product.price}</p>
-        <button
-          className="button"
-          onClick={() => {
-            addToCart(product);
-            navigate('/');
-          }}
-        >
-          Add to Cart
-        </button>
-        <button className="button" onClick={() => navigate('/')}>
-          Go Back
-        </button>
+    <>
+      <div className="page-container">
+        {product ? (
+          <div className="product-details">
+            <h2>{product.title}</h2>
+            <img src={product.image} alt={product.title} />
+            <p>Category: {product.category}</p>
+            <p>Price: ${product.price}</p>
+            {isLoggedIn && (
+              <button className="button" onClick={addToCart}>
+                Add to Cart
+              </button>
+            )}
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+        <div>
+          <button onClick={() => navigate('/')}>&larr; Back to Home</button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,8 +1,9 @@
+// navigation.js
 import React from "react";
 import { Link } from "react-router-dom";
 import shoppingCart from "../images/shopping cart.webp";
 
-export default function Navigation({ cart }) {
+export default function Navigation({ cart, isLoggedIn, onLogout }) {
   // Calculate total items in the cart
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
@@ -15,8 +16,14 @@ export default function Navigation({ cart }) {
         </h1>
         <div className="logo">
           <Link to="/">Home</Link>
-          <Link to="/cart">Cart ({totalItems})</Link>
-          <Link to="/account"></Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/cart">Cart ({totalItems})</Link>
+              <button onClick={onLogout}>Logout</button>
+            </>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
         </div>
       </nav>
     </>

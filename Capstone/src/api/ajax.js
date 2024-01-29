@@ -24,26 +24,29 @@ export const fetchsingleProduct = async (productId) => {
   };
 
 
-
-
-
-
-export async function userLogin(userobject) {
-  try {
-    const resp = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userobject),
-    });
-
-    const json = await resp.json();
-    return json;
-  } catch (err) {
-    console.error(err);
+  export async function userLogin(username, password) {
+    try {
+      const resp = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        }),
+      });
+      const json = await resp.json();
+      return json;
+    } catch (err) {
+      console.error(err);
+    }
   }
-}
+
+
+
+
+
 
 /*
 export async function getUser(token) {

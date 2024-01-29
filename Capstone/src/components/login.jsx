@@ -1,49 +1,54 @@
-import React, { useState } from "react";
-import { userLogin } from "../api/ajax";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { userLogin } from '../api/ajax';
+import { useNavigate } from 'react-router-dom';
 
-export default function Login({ setToken }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const userObject = { email, password };
-      const { user, message, token } = await userLogin(userObject);
-
-      setToken(token);
-      navigate("/account");
-      setErrorMessage("");
-      console.log(user);
-      console.log(message);
-    } catch (error) {
-      setErrorMessage("Login failed. Please check your credentials.");
-      console.error("Login failed", error);
-    }
-  };
-
-  return (
-    <>
-      <div className="login">
-        <form className="loginform" onSubmit={handleSubmit}>
+export default function Login() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+  
+    const handleLogin = async (e) => {
+      e.preventDefault();
+  
+      try {
+        const response = await userLogin(username, password);
+  
+        // Check if response contains a token
+        if (response && response.token) {
+          // Handle successful login (e.g., store token, navigate to dashboard)
+          console.log('Login successful!');
+        } else {
+          // Handle login error
+          setError('Invalid username or password');
+        }
+      } catch (err) {
+        console.error('Login failed:', err);
+        setError('An error occurred while logging in');
+      }
+    };
+  
+    return (
+      <div>
+        <form onSubmit={handleLogin}>
           <input
-            placeholder="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <input
-            placeholder="Password"
             type="password"
+            placeholder="Password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit">Login</button>
         </form>
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+        {error && <p>{error}</p>}
       </div>
-    </>
-  );
+    );
 }
+
+
+
