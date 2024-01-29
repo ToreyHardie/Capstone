@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { fetchProducts } from '../api/ajax';
 import { useNavigate } from 'react-router-dom';
 
-export default function Home({ isLoggedIn }) {
+export default function Home({ isLoggedIn, addToCart }) {
   const [products, setProducts] = useState([]);
   const [searchProducts, setSearchProducts] = useState('');
   const [storedProducts, setStoredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
-  const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
   const filteredProducts = storedProducts.filter(product => {
@@ -39,10 +38,6 @@ export default function Home({ isLoggedIn }) {
 
   const categories = [...new Set(products.map(product => product.category))];
 
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-  };
-
   return (
     <>
       <div className="page-container">
@@ -57,9 +52,7 @@ export default function Home({ isLoggedIn }) {
               {isLoggedIn && (
                 <button
                   className="button"
-                  onClick={() => {
-                    addToCart(product);
-                  }}
+                  onClick={() => addToCart(product)} // Ensure addToCart is called correctly
                 >
                   Add to Cart
                 </button>
@@ -83,4 +76,3 @@ export default function Home({ isLoggedIn }) {
     </>
   );
 }
-

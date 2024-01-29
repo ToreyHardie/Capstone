@@ -1,6 +1,14 @@
 import React from 'react';
 
-export default function Cart({ cart, removeFromCart }) {
+export default function Cart({ cart, removeFromCart, clearCart }) {
+  const handleRemoveFromCart = (index) => {
+    removeFromCart(index); // Call the removeFromCart function passed from the parent component
+  };
+
+  const handleClearCart = () => {
+    clearCart(); // Call the clearCart function passed from the parent component
+  };
+
   return (
     <div className="page-container">
       <h2>Cart</h2>
@@ -8,10 +16,11 @@ export default function Cart({ cart, removeFromCart }) {
         {cart.map((item, index) => (
           <li key={index}>
             {item.title} - ${item.price}
-            <button onClick={() => removeFromCart(index)}>Remove</button>
+            <button onClick={() => handleRemoveFromCart(index)}>Remove</button>
           </li>
         ))}
       </ul>
+      <button onClick={handleClearCart}>Clear Cart</button>
     </div>
   );
 }

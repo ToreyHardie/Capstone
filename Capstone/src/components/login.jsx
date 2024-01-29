@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { userLogin } from '../api/ajax';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+export default function Login({ onLogin }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -16,8 +16,10 @@ export default function Login() {
   
         // Check if response contains a token
         if (response && response.token) {
-          // Handle successful login (e.g., store token, navigate to dashboard)
+          // Handle successful login
           console.log('Login successful!');
+          onLogin(response.token); // Update login status
+          navigate('/'); // Redirect to home page
         } else {
           // Handle login error
           setError('Invalid username or password');
@@ -44,6 +46,9 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit">Login</button>
+          <br></br>
+        "username": "johnd",
+        "password": "m38rmF$",
         </form>
         {error && <p>{error}</p>}
       </div>
