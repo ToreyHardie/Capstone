@@ -15,31 +15,22 @@ export async function fetchProducts() {
 }
 
 
-/*
+export const fetchsingleProduct = async (productId) => {
+    try {
+      const rsp = await fetch(`${API_URL}/products/${productId}`);
+      const json = await rsp.json();
+      return json;
+    } catch (err) {}
+  };
 
-export async function getProducts(userobject) {
-  try {
-    const resp = await fetch(`${API_URL}/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userobject),
-    });
 
-    const json = await resp.json();
-    console.log(json.token);
-    return json.token;
 
-  } catch (err) {
-    console.error(err);
-  }
-}
+
 
 
 export async function userLogin(userobject) {
   try {
-    const resp = await fetch(`${API_URL}/users/login`, {
+    const resp = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,12 +39,13 @@ export async function userLogin(userobject) {
     });
 
     const json = await resp.json();
-    return json.token;
+    return json;
   } catch (err) {
     console.error(err);
   }
 }
 
+/*
 export async function getUser(token) {
   try {
     const resp = await fetch(`${API_URL}/users/me`, {
@@ -87,13 +79,5 @@ export async function checkoutBook(id, token) {
     console.error(err);
   }
 }
-
-export const fetchSingleBook = async (bookId) => {
-  try {
-    const rsp = await fetch(`${API_URL}/books/${bookId}`);
-    const json = await rsp.json();
-    return json.book;
-  } catch (err) {}
-};
 
 */
